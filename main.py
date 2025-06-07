@@ -2,7 +2,13 @@ import os
 import tempfile
 import logging
 from telegram import Update
-from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, filters
+from telegram.ext import (
+    ApplicationBuilder,
+    ContextTypes,
+    CommandHandler,
+    MessageHandler,
+    filters,
+)
 import speech_recognition as sr
 from gtts import gTTS
 from pydub import AudioSegment
@@ -12,18 +18,19 @@ import openai
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")  # ← Получаем из переменных окружения
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")          # ← Получаем из переменных окружения
 
+# --- Инициализация ---
 openai.api_key = OPENAI_API_KEY
 
-# Логирование
+# --- Пути к ffmpeg/ffprobe ---
+AudioSegment.converter = "/usr/bin/ffmpeg"
+AudioSegment.ffmpeg = "/usr/bin/ffmpeg"
+AudioSegment.ffprobe = "/usr/bin/ffprobe"
+
+# --- Логирование ---
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
-
-# Путь к ffmpeg (автоматически доступен в GitHub Codespaces)
-AudioSegment.converter = "/usr/bin/ffmpeg"
-AudioSegment.ffmpeg = "/usr/bin/ffmpeg"
-AudioSegment.ffprobe = "/usr/bin/ffprobe"
 
 # --- Функции ---
 
